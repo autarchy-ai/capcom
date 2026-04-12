@@ -14,27 +14,47 @@ concurrency:
 
 permissions:
   contents: read
-  packages: write
   pull-requests: write
 
 jobs:
   # ---------------------------------------------------------------------------
-  # Lint — fast checks
+  # ADR Conformance — architecture decision enforcement
   # ---------------------------------------------------------------------------
-  lint:
+  adr-conformance:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - name: Check files
-        run: echo "TODO — add lint steps when tech stack is chosen"
+      - name: Run ADR conformance checks
+        run: scripts/check-adr-conformance.sh
 
   # ---------------------------------------------------------------------------
-  # Test — unit tests
+  # Lint — formatting and static analysis
+  # ---------------------------------------------------------------------------
+  lint:
+    runs-on: ubuntu-latest
+    needs: [adr-conformance]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
+      - name: cargo fmt --check
+        run: cargo fmt --all --check
+      - name: cargo clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+  # ---------------------------------------------------------------------------
+  # Test — build and unit tests
   # ---------------------------------------------------------------------------
   test:
     runs-on: ubuntu-latest
     needs: [lint]
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - name: Run tests
-        run: echo "TODO — add test steps when tech stack is chosen"
+      - uses: dtolnay/rust-toolchain@29eef336d9b2848a0b548edc03f92a220660cdb8 # stable
+      - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
+      - name: cargo build
+        run: cargo build --workspace --all-targets
+      - name: cargo test
+        run: cargo test --workspace --all-targets

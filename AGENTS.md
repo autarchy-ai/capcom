@@ -2,6 +2,18 @@
 
 This file provides context for AI coding agents (Claude Code, Codex, Copilot, etc.) working in this repository.
 
+capcom is the Rust kernel for Aphelion (see ADR-001 in KeplerOps/aphelion).
+V1 is single-node only (ADR-003/005/009). Cross-repo plan rules in aphelion
+govern both product and kernel layers.
+
+## Ground Control Context
+
+This repo's Ground Control project id, workflow commands, and plan
+rules live in `.ground-control.yaml` at repo root (with larger rule
+files under `.gc/`). Agents read it via the
+`gc_get_repo_ground_control_context` MCP tool, which returns the full
+workflow config in a single call.
+
 ## Ground Control
 
 This project uses **Ground Control** for requirements management and traceability. Ground Control is a requirements engineering platform that stores requirements, relations (parent/child, dependencies), traceability links (code ↔ requirements), ADRs, and project status.
@@ -28,7 +40,7 @@ Ground Control is available as an MCP (Model Context Protocol) server configured
 | `gc_create_github_issue` | Create a GitHub issue from a requirement |
 | `gc_list_adrs` | List architecture decision records |
 
-The Ground Control project identifier for this repo is set in `CLAUDE.md`. Use it in the `project` parameter for all GC tool calls.
+The Ground Control project identifier for this repo is `capcom`, declared in `.ground-control.yaml`. Use it in the `project` parameter for all GC tool calls.
 
 ### Workflow
 

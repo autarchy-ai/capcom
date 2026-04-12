@@ -68,6 +68,10 @@ Thumbs.db
 *.tfplan
 .terraform/
 
+# Rust
+target/
+*.pdb
+
 # Local files
 archive/
 .codex

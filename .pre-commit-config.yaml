@@ -28,3 +28,28 @@ repos:
     rev: v8.24.0
     hooks:
       - id: gitleaks
+
+  # =============================================================================
+  # STAGE 3: Rust toolchain
+  # =============================================================================
+
+  - repo: local
+    hooks:
+      - id: rustfmt-check
+        name: cargo fmt --all --check
+        entry: cargo fmt --all -- --check
+        language: system
+        pass_filenames: false
+        files: '\.rs$'
+
+  # =============================================================================
+  # STAGE 4: ADR conformance
+  # =============================================================================
+
+  - repo: local
+    hooks:
+      - id: check-adr-conformance
+        name: ADR conformance checks
+        entry: scripts/check-adr-conformance.sh
+        language: system
+        pass_filenames: false

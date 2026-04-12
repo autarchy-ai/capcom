@@ -7,15 +7,22 @@ Always do the right thing, not the easy thing.
 
 ## Project
 
-<!-- TODO: Describe your project here. -->
+capcom is the product-owned Rust kernel for Aphelion — a graph database
+engine. See ADR-001 in the KeplerOps/aphelion repo for the kernel
+selection rationale. V1 is single-node only (ADR-003/005/009).
 
 ## Build
 
-<!-- TODO: Document build commands when tech stack is chosen. -->
+Build commands land with the first Cargo workspace scaffolding work
+order step. Until then, refer to the commented workflow block in
+`.ground-control.yaml` for the planned values.
 
 ## Ground Control
 
-The Ground Control project identifier for this repo is `<!-- TODO: set your GC project identifier -->`.
+The Ground Control project identifier for this repo is `capcom`, set
+in `.ground-control.yaml` at repo root. The full workflow config
+(including workflow commands, sonarcloud settings, and plan rules) is
+read by agents via the `gc_get_repo_ground_control_context` MCP tool.
 
 ## Code Review
 

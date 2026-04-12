@@ -1,0 +1,15 @@
+[package]
+name = "capcom-engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+description = "Capcom engine node process -- co-located out-of-process kernel host"
+
+[lints]
+workspace = true
+
+[dependencies]
+capcom = { path = "../capcom" }

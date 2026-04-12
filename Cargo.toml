@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = ["crates/capcom", "crates/capcom-engine"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT"
+authors = ["KeplerOps"]
+repository = "https://github.com/KeplerOps/capcom"
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "warn"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
