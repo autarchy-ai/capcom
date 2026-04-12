@@ -5,6 +5,43 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-04-11
+
+### Added
+
+- `crates/capcom/src/data_model/` module satisfying `APH-DM-001`
+  (labeled property graph data model). Submodules: `ids`, `labels`,
+  `properties`, `node`, `relationship`, `graph`. All types are
+  `pub(crate)` per the architecture preflight; the kernel's public
+  surface remains `capcom::version()`.
+- `crates/capcom/src/error.rs` introducing `KernelError`, the single
+  kernel-wide error enum (one variant today: `UnknownNode`). Future
+  kernel error variants land here per preflight guidance.
+- `docs/README.md` and `docs/design/data-model.md`. The design note
+  documents the type vocabulary and embeds Mermaid class and sequence
+  diagrams covering `Graph`, `Node`, `Relationship`, `PropertyMap`,
+  `PropertyValue`, identifiers, and the `KernelError` path.
+- `docs/APH-DM-001-preflight.md` recording the codex architecture
+  preflight guardrails for `APH-DM-001`.
+- 33 in-crate tests covering id round-trips, label / relationship-type
+  construction, property map insertion and deterministic iteration
+  order, node and relationship value semantics, and the full LPG
+  semantics of `Graph::create_node` / `create_relationship` / lookup
+  including the `KernelError::UnknownNode` error path.
+
+### Changed
+
+- `crates/capcom/src/lib.rs` declares `data_model` and `error` as
+  `pub(crate)` modules behind `#[allow(dead_code)]` (rationale inline)
+  until sibling storage / txn / query requirements wire them into
+  runtime call paths.
+- `README.md` adds a "Kernel surface" / "Data model" section, refreshes
+  the layout block to include `docs/` and the `data_model/` source
+  tree, and links the new design note and preflight.
+- `AGENTS.md` Repository Structure block adds `crates/`, `docs/`,
+  `docs/design/`, and `docs/adrs/` (with a note that aphelion ADRs are
+  authoritative and no local ADRs exist yet).
+
 ## [0.2.0] - 2026-04-11
 
 ### Added
