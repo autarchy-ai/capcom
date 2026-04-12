@@ -1,0 +1,10 @@
+schema_version: 1
+project: capcom
+github_repo: KeplerOps/capcom
+workflow:
+  test_command: cargo test --workspace
+  completion_command: cargo fmt --all --check && cargo clippy --workspace --all-targets -- -D warnings && cargo build --workspace --all-targets && cargo test --workspace --all-targets && scripts/check-adr-conformance.sh
+  lint_command: cargo clippy --workspace --all-targets -- -D warnings
+  format_command: cargo fmt --all
+# Single-node only in V1 per ADR-003/005/009 (aphelion). Enforced by
+# scripts/check-adr-conformance.sh and .claude/hooks/adr-boundary-check.sh.
