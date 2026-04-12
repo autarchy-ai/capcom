@@ -9,10 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Cargo workspace structure with two crates:
+- Cargo workspace structure with three crates:
   - `crates/capcom/` -- library crate, placeholder kernel API
   - `crates/capcom-engine/` -- binary crate, placeholder for the future
     co-located out-of-process engine node (ADR-012)
+  - `crates/capcom-arch-tests/` -- architecture-test crate enforcing
+    workspace-level invariants via `cargo test`. Three test suites:
+    `no_distributed_code` (ADR-003/005/009), `no_banned_engines`
+    (ADR-001), and `kernel_boundary` (public API surface + engine
+    dependency closure)
 - `rust-toolchain.toml` pinning the stable channel with `rustfmt` and
   `clippy` components (minimal profile)
 - `rustfmt.toml` setting edition 2024
