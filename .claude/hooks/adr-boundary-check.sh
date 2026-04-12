@@ -30,8 +30,10 @@ if [[ -z "$CONTENT" ]]; then
 fi
 
 # Skip non-source files (docs, configs, this hook itself, lockfiles, manifests)
+# and skip the architecture-tests crate, which contains the banned patterns
+# as literal strings by design in order to enforce them.
 case "$FILE_PATH" in
-  */docs/*|*/.claude/*|*/.github/*|*/scripts/*|*.md|*.yaml|*.yml|*.json|*.toml|*.lock|*.txt|*.sh)
+  */docs/*|*/.claude/*|*/.github/*|*/scripts/*|*/crates/capcom-arch-tests/*|*.md|*.yaml|*.yml|*.json|*.toml|*.lock|*.txt|*.sh)
     exit 0
     ;;
 esac

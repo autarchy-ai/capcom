@@ -7,6 +7,13 @@ name = "capcom"
 version = "0.1.0"
 
 [[package]]
+name = "capcom-arch-tests"
+version = "0.1.0"
+dependencies = [
+ "capcom",
+]
+
+[[package]]
 name = "capcom-engine"
 version = "0.1.0"
 dependencies = [

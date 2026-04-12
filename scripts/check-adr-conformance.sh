@@ -18,13 +18,16 @@ set -euo pipefail
 
 ERRORS=0
 
-# Determine file list: staged files (pre-commit) or all source files (CI)
+# Determine file list: staged files (pre-commit) or all source files (CI).
+# The architecture-tests crate (`crates/capcom-arch-tests`) contains the
+# banned patterns as literal strings by design -- it enforces them via
+# cargo test. Exclude it from this script's walk to avoid false positives.
 if git rev-parse --is-inside-work-tree &>/dev/null && [ -n "$(git diff --cached --name-only 2>/dev/null)" ]; then
   # Pre-commit mode: check staged files
-  FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(rs|toml)$' || true)
+  FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(rs|toml)$' | grep -v '^crates/capcom-arch-tests/' || true)
 else
-  # CI mode: check all source files under crates/
-  FILES=$(find crates -type f \( -name '*.rs' -o -name 'Cargo.toml' \) 2>/dev/null || true)
+  # CI mode: check all source files under crates/, excluding the arch-tests crate
+  FILES=$(find crates -type f \( -name '*.rs' -o -name 'Cargo.toml' \) -not -path 'crates/capcom-arch-tests/*' 2>/dev/null || true)
 fi
 
 if [ -z "$FILES" ]; then
