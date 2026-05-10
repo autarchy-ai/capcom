@@ -67,5 +67,8 @@ If your agent does not support MCP, you can still follow this workflow manually 
 ```
 .claude/          # Claude Code agent configuration (settings, hooks, rules, skills)
 .github/          # GitHub Actions CI/CD workflows
-docs/adrs/        # Architecture Decision Records (when created)
+crates/           # Rust workspace (capcom kernel, engine host, arch tests)
+docs/             # Capcom-local design notes and per-requirement preflights
+docs/design/      # Design notes (e.g. data model)
+docs/adrs/        # Capcom-local ADRs (none yet — aphelion ADRs are authoritative)
 ```

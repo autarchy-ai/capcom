@@ -9,9 +9,17 @@ for the co-located out-of-process integration model.
 
 ## Status
 
-Pre-alpha. This repo currently contains project scaffolding only. The
-kernel itself (storage, data model, transactions, query execution)
-lands in subsequent work order steps -- see
+Pre-alpha. The kernel currently has:
+
+- Project scaffolding (workspace, CI, ADR-conformance enforcement,
+  architecture tests).
+- The `data_model` module satisfying `APH-DM-001` (labeled property
+  graph) — kernel-internal, not yet on the public API. See
+  [`docs/design/data-model.md`](docs/design/data-model.md) and the
+  [preflight note](docs/APH-DM-001-preflight.md).
+
+Storage, transactions, query execution, and the rest of the kernel
+land in subsequent work order steps -- see
 [`aphelion/notes/work-order.md`](https://github.com/KeplerOps/aphelion/blob/main/notes/work-order.md)
 for the full build order.
 
@@ -39,16 +47,46 @@ Requires Rust stable 1.85+ with `rustfmt` and `clippy` components. The
 ├── crates/
 │   ├── capcom/                    # library crate -- the kernel itself
 │   │   ├── Cargo.toml
-│   │   └── src/lib.rs             # currently a stub (version placeholder)
-│   └── capcom-engine/             # binary crate -- the engine node process
-│       ├── Cargo.toml
-│       └── src/main.rs            # currently a stub
+│   │   └── src/
+│   │       ├── lib.rs             # public API surface (currently just version())
+│   │       ├── error.rs           # KernelError (crate-internal)
+│   │       └── data_model/        # APH-DM-001 labeled property graph
+│   │           ├── mod.rs
+│   │           ├── ids.rs
+│   │           ├── labels.rs
+│   │           ├── properties.rs
+│   │           ├── node.rs
+│   │           ├── relationship.rs
+│   │           └── graph.rs
+│   ├── capcom-engine/             # binary crate -- the engine node process
+│   │   ├── Cargo.toml
+│   │   └── src/main.rs            # currently a stub
+│   └── capcom-arch-tests/         # cargo-test architecture gate
+├── docs/
+│   ├── README.md                  # docs index
+│   ├── design/data-model.md       # APH-DM-001 design + diagrams
+│   └── APH-DM-001-preflight.md    # codex architecture preflight note
 ├── scripts/
 │   └── check-adr-conformance.sh   # grep-based ADR enforcement
 ├── .github/workflows/ci.yml       # adr-conformance / lint / test jobs
 ├── .ground-control.yaml           # Ground Control workflow config for this repo
 └── .claude/hooks/adr-boundary-check.sh   # PreToolUse hook for Claude Code
 ```
+
+## Kernel surface
+
+### Data model
+
+The `data_model` module satisfies `APH-DM-001` (labeled property graph)
+with `Node`, `Relationship`, `Label`, `RelationshipType`,
+`PropertyKey`/`PropertyValue`/`PropertyMap`, and an in-memory `Graph`
+container. Every type is currently `pub(crate)` per the
+[architecture preflight](docs/APH-DM-001-preflight.md): the kernel's
+public surface stays at `capcom::version()` until a sibling requirement
+needs to expose graph operations across the kernel boundary, at which
+point [`crates/capcom-arch-tests/tests/kernel_boundary.rs`](crates/capcom-arch-tests/tests/kernel_boundary.rs)
+gets a paired update in the same change. Full design notes and Mermaid
+class/sequence diagrams: [`docs/design/data-model.md`](docs/design/data-model.md).
 
 ## Architectural constraints
 
